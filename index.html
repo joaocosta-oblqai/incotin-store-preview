@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incotin — conceito de loja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#111110;--mut:#75726B;--faint:#A8A49B;--line:#ECEAE4;
+    --paper:#FFFFFF;--soft:#F7F5F1;--accent:#111110;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;line-height:1.5;letter-spacing:-.01em}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 44px}
+  .eyebrow{font-size:11.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;font-size:14.5px;font-weight:500;padding:15px 28px;border-radius:8px;transition:opacity .2s,transform .2s;cursor:pointer;border:0}
+  .btn:hover{opacity:.88;transform:translateY(-1px)}
+  .btn.out{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn.out:hover{border-color:var(--ink);opacity:1}
+  .lnk{font-size:14.5px;font-weight:500;display:inline-flex;align-items:center;gap:8px;transition:gap .2s;cursor:pointer}
+  .lnk:hover{gap:12px}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);backdrop-filter:saturate(120%) blur(10px);border-bottom:1px solid transparent;transition:border-color .3s}
+  header.scrolled{border-color:var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:82px}
+  .mark{font-size:20px;font-weight:600;letter-spacing:-.02em}
+  nav.links{display:flex;gap:38px}
+  nav.links a{font-size:14px;color:#46433D;font-weight:400;cursor:pointer}
+  nav.links a:hover,nav.links a.on{color:var(--ink)}
+  .navr{display:flex;align-items:center;gap:24px}
+  .navr a{font-size:14px;cursor:pointer}
+  .cartbtn{display:inline-flex;align-items:center;gap:7px;font-size:13.5px}
+  .cartbtn .b{display:inline-flex;align-items:center;justify-content:center;min-width:19px;height:19px;border-radius:9px;background:var(--ink);color:#fff;font-size:11px;font-weight:500;padding:0 5px}
+
+  section{padding:0 0 110px}
+  .pagetop{padding:72px 0 56px}
+  .pagetop h1{font-size:52px;font-weight:500;letter-spacing:-.045em;line-height:1.02;margin-top:14px}
+  .pagetop p{margin-top:18px;font-size:17px;color:var(--mut);max-width:34rem;line-height:1.6}
+  .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:40px;gap:30px}
+  .head h2{font-size:30px;font-weight:500;letter-spacing:-.03em}
+  .head a{font-size:14px;font-weight:500;color:var(--mut);cursor:pointer}
+  .head a:hover{color:var(--ink)}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1fr 0.86fr;gap:80px;align-items:center;padding:92px 0 104px}
+  .hero h1{font-size:72px;font-weight:500;line-height:1.0;letter-spacing:-.045em}
+  .hero .lead{margin-top:30px;font-size:18px;line-height:1.6;color:var(--mut);max-width:25rem}
+  .cta{margin-top:40px;display:flex;align-items:center;gap:26px}
+  .hero .him{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px}
+
+  /* colour + product grids */
+  .cols{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+  .col{cursor:pointer}
+  .col .blk{aspect-ratio:1/1.25;border-radius:8px;transition:transform .3s}
+  .col:hover .blk{transform:translateY(-5px)}
+  .col .nm{margin-top:13px;font-size:13px;font-weight:500}
+  .col .cd{font-size:12px;color:var(--faint);margin-top:2px}
+
+  .prods{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+  .card{cursor:pointer}
+  .card .blk{aspect-ratio:1/1.16;border-radius:10px;transition:transform .3s;position:relative}
+  .card .blk .tag{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.85);font-size:11px;font-weight:500;padding:4px 9px;border-radius:6px;color:#46433D}
+  .card:hover .blk{transform:translateY(-5px)}
+  .card h3{font-size:15px;font-weight:500;margin-top:18px}
+  .card .d{font-size:13px;color:var(--mut);margin-top:4px}
+  .card .p{font-size:14px;font-weight:500;margin-top:12px}
+
+  .filters{display:flex;gap:10px;margin-bottom:40px;flex-wrap:wrap}
+  .chip{font-size:13.5px;font-weight:500;padding:9px 18px;border-radius:999px;border:1px solid var(--line);color:#46433D;cursor:pointer;background:#fff;transition:all .2s}
+  .chip:hover{border-color:var(--ink)}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* PDP */
+  .pdp{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;padding-top:40px}
+  .pdp .big{aspect-ratio:1/1;border-radius:14px}
+  .pdp .thumbs{display:flex;gap:12px;margin-top:14px}
+  .pdp .thumbs div{width:64px;height:64px;border-radius:8px;cursor:pointer;border:1px solid transparent}
+  .pdp .thumbs div.on{border-color:var(--ink)}
+  .pdp h1{font-size:34px;font-weight:500;letter-spacing:-.03em;margin-top:6px}
+  .pdp .price{font-size:22px;font-weight:500;margin-top:18px}
+  .pdp .opt{margin-top:26px}
+  .pdp .opt .lab{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:500;margin-bottom:12px}
+  .pdp .opts{display:flex;gap:10px;flex-wrap:wrap}
+  .pdp .opts button{font-size:13.5px;font-weight:500;padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer}
+  .pdp .opts button.on{border-color:var(--ink)}
+  .pdp .add{margin-top:30px;display:flex;gap:14px;align-items:center}
+  .pdp .desc{margin-top:34px;padding-top:28px;border-top:1px solid var(--line);font-size:15px;color:var(--mut);line-height:1.7;max-width:30rem}
+  .spec{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:14px 30px;max-width:30rem}
+  .spec .r{display:flex;justify-content:space-between;font-size:13.5px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .spec .r span:first-child{color:var(--mut)}
+
+  /* configurator */
+  .cfgflow{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;padding-top:30px}
+  .field{margin-bottom:22px}
+  .field label{display:block;font-size:13px;font-weight:500;margin-bottom:9px;color:#46433D}
+  .field textarea,.field select{width:100%;font:inherit;font-size:14.5px;padding:13px 15px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);outline:none;resize:none}
+  .field textarea:focus,.field select:focus{border-color:var(--ink)}
+  .reco{background:var(--soft);border-radius:16px;padding:32px}
+  .reco .top{display:flex;gap:18px;align-items:center}
+  .reco .sw{width:64px;height:64px;border-radius:12px;flex:none}
+  .reco .pname{font-size:18px;font-weight:500}
+  .reco .pf{font-size:13.5px;color:var(--mut);margin-top:3px}
+  .reco .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}
+  .reco .m{background:#fff;border-radius:10px;padding:14px 16px}
+  .reco .m .k{font-size:12px;color:var(--faint);letter-spacing:.04em}
+  .reco .m .v{font-size:16px;font-weight:500;margin-top:4px}
+  .reco .why{font-size:13.5px;color:var(--mut);line-height:1.6}
+  .reco .btn{margin-top:22px;width:100%;justify-content:center}
+
+  /* stores */
+  .stores{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  .store{border:1px solid var(--line);border-radius:14px;padding:26px 28px}
+  .store h3{font-size:18px;font-weight:500}
+  .store .a{font-size:14px;color:var(--mut);margin-top:8px;line-height:1.55}
+  .store .meta{margin-top:16px;display:flex;gap:24px;font-size:13px;color:var(--mut)}
+  .store .meta b{color:var(--ink);font-weight:500}
+
+  /* editorial / about / contact */
+  .ed{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  .ed img{width:100%;aspect-ratio:5/4;object-fit:cover;border-radius:14px}
+  .ed h2{font-size:34px;font-weight:500;letter-spacing:-.03em;line-height:1.08;margin-top:10px}
+  .ed p{margin-top:18px;font-size:16px;color:var(--mut);line-height:1.65;max-width:28rem}
+  .mini{margin-top:28px;display:flex;gap:40px}
+  .mini .k{font-size:30px;font-weight:500}
+  .mini .l{font-size:12.5px;color:var(--mut);margin-top:3px}
+  .cform{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:start}
+  .cform .field input,.cform .field textarea,.cform .field select{width:100%;font:inherit;font-size:14.5px;padding:13px 15px;border:1px solid var(--line);border-radius:9px;outline:none}
+  .cinfo .r{padding:16px 0;border-bottom:1px solid var(--line)}
+  .cinfo .r .k{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .cinfo .r .v{font-size:15px;margin-top:5px}
+
+  /* cart */
+  .cart{display:grid;grid-template-columns:1.5fr 1fr;gap:56px;align-items:start}
+  .citem{display:flex;gap:18px;padding:20px 0;border-bottom:1px solid var(--line)}
+  .citem .sw{width:74px;height:74px;border-radius:10px;flex:none}
+  .citem .nm{font-size:15px;font-weight:500}
+  .citem .df{font-size:13px;color:var(--mut);margin-top:4px}
+  .citem .pr{margin-left:auto;font-size:14px;font-weight:500}
+  .sumcard{background:var(--soft);border-radius:16px;padding:28px}
+  .sumcard .r{display:flex;justify-content:space-between;font-size:14px;padding:9px 0;color:var(--mut)}
+  .sumcard .r.tot{font-size:17px;font-weight:500;color:var(--ink);border-top:1px solid var(--line);margin-top:8px;padding-top:16px}
+  .sumcard .btn{width:100%;justify-content:center;margin-top:20px}
+
+  footer{border-top:1px solid var(--line);padding:54px 0 40px;margin-top:30px}
+  .fc{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+  footer .mark{font-size:18px}
+  footer .bl{font-size:13.5px;color:var(--mut);margin-top:12px;max-width:16rem;line-height:1.55}
+  .fcol h4{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:14px;font-weight:500}
+  .fcol a{display:block;font-size:13.5px;color:#46433D;padding:5px 0;cursor:pointer}
+  .fcol a:hover{color:var(--ink)}
+  .fb{display:flex;justify-content:space-between;margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--faint)}
+
+  @media(max-width:980px){
+    .wrap{padding:0 22px}
+    .hero{grid-template-columns:1fr;gap:40px;padding:56px 0 64px}.hero h1{font-size:46px}
+    nav.links{display:none}
+    .cols{grid-template-columns:repeat(3,1fr)}
+    .prods{grid-template-columns:repeat(2,1fr)}
+    .pdp,.cfgflow,.ed,.cform,.cart,.stores{grid-template-columns:1fr;gap:34px}
+    .fc{grid-template-columns:1fr 1fr}
+    .pagetop h1{font-size:38px}
+  }
+</style>
+</head>
+<body>
+
+<header id="hd">
+  <div class="wrap nav">
+    <a class="mark" data-go="/">Incotin</a>
+    <nav class="links" id="nav">
+      <a data-go="/produtos" data-k="produtos">Produtos</a>
+      <a data-go="/cores" data-k="cores">Cores</a>
+      <a data-go="/configurador" data-k="configurador">Configurador</a>
+      <a data-go="/lojas" data-k="lojas">Lojas</a>
+      <a data-go="/sobre" data-k="sobre">Sobre</a>
+    </nav>
+    <div class="navr">
+      <a data-go="/contacto">Contacto</a>
+      <a class="cartbtn" data-go="/carrinho">Carrinho <span class="b">2</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="fc">
+      <div>
+        <span class="mark">Incotin</span>
+        <p class="bl">Tintas, cor e apoio de loja para decisões mais seguras.</p>
+      </div>
+      <div class="fcol"><h4>Produtos</h4><a data-go="/produtos">Interior</a><a data-go="/produtos">Exterior</a><a data-go="/produtos">Humidade</a></div>
+      <div class="fcol"><h4>Cor</h4><a data-go="/cores">Coleção</a><a data-go="/configurador">Configurador</a><a data-go="/produtos">Amostras</a></div>
+      <div class="fcol"><h4>Apoio</h4><a data-go="/lojas">Lojas</a><a data-go="/contacto">Contacto</a></div>
+    </div>
+    <div class="fb"><span>© 2026 Incotin</span><span>Entrega · Recolha em loja · Pagamento seguro</span></div>
+  </div>
+</footer>
+
+<script>
+var COLOURS=[
+  ['Linho','IN-1004','#ECE6D9','neutros'],
+  ['Areia','IN-1208','#DECBA9','quentes'],
+  ['Caliça','IN-1102','#E4DACB','neutros'],
+  ['Sálvia','IN-2140','#A3AD9C','verdes'],
+  ['Verde Pinho','IN-2655','#33493F','verdes'],
+  ['Atlântico','IN-2903','#465C6E','azuis'],
+  ['Névoa','IN-2710','#9AA9AE','azuis'],
+  ['Argila','IN-3110','#B98F76','quentes'],
+  ['Terracota','IN-3471','#BB6A4D','quentes'],
+  ['Rosa Velho','IN-1822','#D7BEB2','neutros'],
+  ['Ocre','IN-1640','#C79A55','quentes'],
+  ['Grafite','IN-5020','#3C3B38','neutros']
+];
+var PRODUCTS=[
+  ['incoplus','IncoPlus Interior HD','Mate lavável para salas e quartos','34,50 €','#CDB79A','Interior'],
+  ['incoveludo','Inco Veludo','Acetinado suave, fácil de limpar','37,00 €','#C9C2B4','Interior'],
+  ['signature','INCOMIX Signature','Base premium para afinação de cor','42,80 €','#D7BEB2','Interior'],
+  ['incostop','IncoStop Casa de Banho','Proteção para vapor e condensação','39,90 €','#A9BFC8','Humidade'],
+  ['incostop-teto','IncoStop Tecto','Anti-condensação para tectos','41,00 €','#BFC8C4','Humidade'],
+  ['incoshield','IncoShield Fachadas','Cobertura exterior resistente ao tempo','46,00 €','#A3AD9C','Exterior'],
+  ['incoshield-mad','IncoShield Madeira','Proteção para madeira exterior','44,00 €','#B98F76','Exterior'],
+  ['incoprimer','IncoPrimer Exterior','Primário de aderência reforçada','28,00 €','#D9D3C7','Exterior']
+];
+var STORES=[
+  ['Gondomar — Sede','Rua da Indústria 142, 4420 Gondomar','Seg–Sáb 9h–19h','+351 224 000 100'],
+  ['Porto — Boavista','Av. da Boavista 1203, 4100 Porto','Seg–Sáb 9h–19h','+351 226 000 200'],
+  ['Braga — Centro','Rua dos Chãos 58, 4700 Braga','Seg–Sáb 9h–18h30','+351 253 000 300'],
+  ['Aveiro','Av. Dr. Lourenço Peixinho 90, 3800 Aveiro','Seg–Sex 9h–19h · Sáb 9h–13h','+351 234 000 400']
+];
+
+function colourCard(c){return '<div class="col" data-go="/produto/signature"><div class="blk" style="background:'+c[2]+'"></div><div class="nm">'+c[0]+'</div><div class="cd">'+c[1]+'</div></div>';}
+function prodCard(p){return '<div class="card" data-go="/produto/'+p[0]+'"><div class="blk" style="background:'+p[4]+'"><span class="tag">'+p[5]+'</span></div><h3>'+p[1]+'</h3><div class="d">'+p[2]+'</div><div class="p">'+p[3]+'</div></div>';}
+
+var PAGES={};
+
+PAGES['/']=function(){
+  return '<div class="wrap"><section class="hero">'+
+    '<div><p class="eyebrow">Tintas &amp; cor</p>'+
+    '<h1>A cor certa,<br>sem ruído.</h1>'+
+    '<p class="lead">Acabamento, cor e quantidade — com orientação clara, do diagnóstico ao produto certo para a sua casa.</p>'+
+    '<div class="cta"><a class="btn" data-go="/configurador">Configurar a minha tinta</a><a class="lnk" data-go="/cores">Ver cores →</a></div></div>'+
+    '<div><img class="him" alt="Parede pintada num tom neutro quente" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1000&q=80"></div>'+
+    '</section></div>'+
+    '<div class="wrap"><section><div class="head"><h2>A coleção</h2><a data-go="/cores">Todas as cores →</a></div>'+
+    '<div class="cols">'+COLOURS.slice(0,6).map(colourCard).join('')+'</div></section></div>'+
+    '<div class="wrap"><section><div class="head"><h2>Em destaque</h2><a data-go="/produtos">Ver catálogo →</a></div>'+
+    '<div class="prods">'+PRODUCTS.slice(0,4).map(prodCard).join('')+'</div></section></div>'+
+    cfgTeaser();
+};
+
+function cfgTeaser(){
+  return '<div class="wrap"><section><div class="cfgflow"><div><p class="eyebrow">Configurador</p>'+
+    '<h2 style="font-size:40px;font-weight:500;letter-spacing:-.04em;line-height:1.04;margin-top:10px">Diga-nos a divisão.</h2>'+
+    '<p style="margin-top:20px;font-size:16px;color:var(--mut);line-height:1.6;max-width:23rem">Quatro perguntas simples e recebe o produto, a cor e a quantidade certos — sem termos técnicos.</p>'+
+    '<a class="btn" style="margin-top:28px" data-go="/configurador">Começar</a></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr">'+
+    [['01','Descreva o projeto','Em linguagem simples.'],['02','Afinamos a escolha','Acabamento, exposição, divisão.'],['03','Cor com o INCOMIX','Sugestão de tom e quantidade.'],['04','Compra ou recolha','Online ou na loja mais próxima.']].map(function(s,i){return '<div style="padding:22px 22px 26px;border-left:'+(i%2?'1px solid var(--line)':'0')+';border-top:'+(i>1?'1px solid var(--line)':'0')+'"><div style="font-size:13px;color:var(--faint);font-weight:500">'+s[0]+'</div><b style="display:block;margin-top:12px;font-size:15px;font-weight:500">'+s[1]+'</b><span style="display:block;margin-top:6px;font-size:13.5px;color:var(--mut)">'+s[2]+'</span></div>';}).join('')+
+    '</div></div></section></div>';
+}
+
+PAGES['/produtos']=function(){
+  return '<div class="wrap"><div class="pagetop"><p class="eyebrow">Catálogo</p><h1>Tintas para cada divisão.</h1>'+
+    '<p>Soluções de interior, humidade, exterior e afinação de cor — em linguagem simples e comparação direta.</p></div>'+
+    '<section><div class="filters" id="filters">'+
+    ['Tudo','Interior','Humidade','Exterior'].map(function(f,i){return '<button class="chip'+(i===0?' on':'')+'" data-f="'+f+'">'+f+'</button>';}).join('')+
+    '</div><div class="prods" id="grid">'+PRODUCTS.map(prodCard).join('')+'</div></section></div>';
+};
+
+PAGES['/cores']=function(){
+  return '<div class="wrap"><div class="pagetop"><p class="eyebrow">Coleção INCOMIX</p><h1>Cores que assentam na casa.</h1>'+
+    '<p>Uma paleta curada de tons quentes e calmos, fáceis de conjugar com a luz natural de cada divisão. 1.200 cores no sistema completo.</p></div>'+
+    '<section><div class="filters" id="cfilters">'+
+    ['Tudo','neutros','verdes','azuis','quentes'].map(function(f,i){return '<button class="chip'+(i===0?' on':'')+'" data-cf="'+f+'">'+(f==='Tudo'?'Tudo':f.charAt(0).toUpperCase()+f.slice(1))+'</button>';}).join('')+
+    '</div><div class="cols" id="cgrid" style="grid-template-columns:repeat(6,1fr)">'+COLOURS.map(colourCard).join('')+'</div></section></div>';
+};
+
+PAGES['/produto']=function(slug){
+  var p=PRODUCTS.filter(function(x){return x[0]===slug})[0]||PRODUCTS[0];
+  var swatches=['#CDB79A','#A3AD9C','#A9BFC8','#D7BEB2','#3C3B38'];
+  return '<div class="wrap"><section class="pdp">'+
+    '<div><div class="big" id="bigsw" style="background:'+p[4]+'"></div>'+
+    '<div class="thumbs" id="thumbs">'+swatches.map(function(s,i){return '<div class="'+(i===0?'on':'')+'" data-sw="'+s+'" style="background:'+s+'"></div>';}).join('')+'</div></div>'+
+    '<div><p class="eyebrow">'+p[5]+'</p><h1>'+p[1]+'</h1><div class="price">'+p[3]+'</div>'+
+    '<div class="opt"><div class="lab">Acabamento</div><div class="opts" data-grp="fin">'+['Mate','Acetinado','Lavável'].map(function(o,i){return '<button class="'+(i===0?'on':'')+'">'+o+'</button>';}).join('')+'</div></div>'+
+    '<div class="opt"><div class="lab">Embalagem</div><div class="opts" data-grp="sz">'+['1L','5L','15L'].map(function(o,i){return '<button class="'+(i===1?'on':'')+'">'+o+'</button>';}).join('')+'</div></div>'+
+    '<div class="add"><a class="btn" data-go="/carrinho">Adicionar ao carrinho</a><a class="lnk" data-go="/configurador">Não sei a quantidade →</a></div>'+
+    '<p class="desc">'+p[2]+'. Aplicação simples em duas demãos, com bom rendimento e secagem rápida. Aconselhamento de cor gratuito em qualquer loja Incotin.</p>'+
+    '<div class="spec"><div class="r"><span>Rendimento</span><span>~12 m²/L</span></div><div class="r"><span>Demãos</span><span>2</span></div><div class="r"><span>Secagem</span><span>1–2 h</span></div><div class="r"><span>Base</span><span>Aquosa</span></div></div>'+
+    '</div></section></div>';
+};
+
+PAGES['/configurador']=function(){
+  return '<div class="wrap"><div class="pagetop"><p class="eyebrow">Configurador</p><h1>Comece pela divisão.</h1>'+
+    '<p>Responda em linguagem simples. Sugerimos o produto, a cor e a quantidade — sem termos técnicos.</p></div>'+
+    '<section><div class="cfgflow">'+
+    '<div><div class="field"><label>O que quer pintar?</label><textarea id="brief" rows="3">Quero pintar a casa de banho com humidade e renovar a cor.</textarea></div>'+
+    '<div class="field"><label>Divisão</label><select id="room"><option>Casa de banho</option><option>Sala</option><option>Quarto</option><option>Cozinha</option><option>Fachada exterior</option></select></div>'+
+    '<div class="field"><label>Acabamento</label><select id="fin"><option>Acetinado fácil de limpar</option><option>Mate discreto</option><option>Lavável uso diário</option></select></div>'+
+    '<div class="field"><label>Área aproximada</label><select id="area"><option>Até 10 m²</option><option selected>10–20 m²</option><option>20–40 m²</option></select></div></div>'+
+    '<div class="reco" id="reco"></div>'+
+    '</div></section></div>';
+};
+
+PAGES['/lojas']=function(){
+  return '<div class="wrap"><div class="pagetop"><p class="eyebrow">Lojas</p><h1>Apoio próximo, antes e depois.</h1>'+
+    '<p>Encontre um ponto Incotin para confirmar cor, quantidade e disponibilidade — com aconselhamento gratuito.</p></div>'+
+    '<section><img alt="Mapa das lojas" style="width:100%;height:300px;object-fit:cover;border-radius:14px;margin-bottom:24px" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1400&q=80">'+
+    '<div class="stores">'+STORES.map(function(s){return '<div class="store"><h3>'+s[0]+'</h3><div class="a">'+s[1]+'</div><div class="meta"><span><b>Horário</b><br>'+s[2]+'</span><span><b>Telefone</b><br>'+s[3]+'</span></div></div>';}).join('')+'</div></section></div>';
+};
+
+PAGES['/sobre']=function(){
+  return '<div class="wrap"><div class="pagetop"><p class="eyebrow">Sobre</p><h1>Tinta que dura,<br>apoio que fica.</h1></div>'+
+    '<section><div class="ed"><img alt="Fabrico" src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1100&q=80">'+
+    '<div><p class="eyebrow">Feito em Portugal</p><h2>Uma marca focada em clareza.</h2>'+
+    '<p>Há mais de 40 anos a fabricar tinta, a Incotin aproxima produto, cor e apoio técnico para tornar cada decisão de compra mais simples — da preparação da parede ao último retoque.</p>'+
+    '<div class="mini"><div><div class="k">40+</div><div class="l">anos a fabricar</div></div><div><div class="k">1.200</div><div class="l">cores INCOMIX</div></div><div><div class="k">48h</div><div class="l">entrega média</div></div></div>'+
+    '</div></div></section></div>';
+};
+
+PAGES['/contacto']=function(){
+  return '<div class="wrap"><div class="pagetop"><p class="eyebrow">Contacto</p><h1>Fale connosco.</h1>'+
+    '<p>Use o configurador para preparar a decisão, ou fale diretamente com a equipa para confirmar a solução final.</p></div>'+
+    '<section><div class="cform"><div>'+
+    '<div class="field"><label>Nome</label><input placeholder="O seu nome"></div>'+
+    '<div class="field"><label>Email</label><input placeholder="email@exemplo.pt"></div>'+
+    '<div class="field"><label>Mensagem</label><textarea rows="5" placeholder="Como podemos ajudar?"></textarea></div>'+
+    '<button class="btn" type="button">Enviar mensagem</button></div>'+
+    '<div class="cinfo"><div class="r"><div class="k">Email</div><div class="v">ola@incotin.pt</div></div>'+
+    '<div class="r"><div class="k">Telefone</div><div class="v">+351 224 000 100</div></div>'+
+    '<div class="r"><div class="k">Sede</div><div class="v">Rua da Indústria 142, 4420 Gondomar</div></div>'+
+    '<div class="r"><div class="k">Horário</div><div class="v">Seg–Sáb · 9h–19h</div></div></div>'+
+    '</div></section></div>';
+};
+
+PAGES['/carrinho']=function(){
+  var items=[['IncoPlus Interior HD','5L · Mate · Sálvia','#A3AD9C','69,00 €'],['Cartela INCOMIX','Amostras de cor · 1 un.','#DECBA9','4,90 €']];
+  return '<div class="wrap"><div class="pagetop"><p class="eyebrow">Carrinho</p><h1>O seu carrinho.</h1></div>'+
+    '<section><div class="cart"><div>'+items.map(function(i){return '<div class="citem"><div class="sw" style="background:'+i[2]+'"></div><div><div class="nm">'+i[0]+'</div><div class="df">'+i[1]+'</div></div><div class="pr">'+i[3]+'</div></div>';}).join('')+'</div>'+
+    '<div class="sumcard"><div class="r"><span>Subtotal</span><span>73,90 €</span></div><div class="r"><span>Entrega</span><span>Calculada no checkout</span></div><div class="r tot"><span>Total</span><span>73,90 €</span></div>'+
+    '<button class="btn" type="button">Ir para checkout</button><button class="btn out" type="button" style="width:100%;justify-content:center;margin-top:10px" data-go="/produtos">Continuar a ver produtos</button></div>'+
+    '</div></section></div>';
+};
+
+function recommend(){
+  var room=(document.getElementById('room')||{}).value||'Casa de banho';
+  var area=(document.getElementById('area')||{}).value||'10–20 m²';
+  var liters=area.indexOf('Até')>=0?2:area.indexOf('20–40')>=0?6:4;
+  var rec={prod:'IncoStop Casa de Banho',fin:'Acetinado resistente à humidade',col:'Verde Sálvia',cd:'IN-2140',sw:'#A3AD9C',why:'A presença de humidade pede prioridade à proteção e à manutenção fácil; o acetinado equilibra limpeza e conforto.'};
+  if(room==='Fachada exterior'){rec={prod:'IncoShield Fachadas',fin:'Acabamento resistente para exterior',col:'Cinza Pedra',cd:'IN-5012',sw:'#9AA9AE',why:'A exposição ao tempo pede uma solução orientada a chuva, sol e desgaste antes de qualquer escolha estética.'};liters=liters+2;}
+  else if(room==='Sala'||room==='Quarto'){rec={prod:'IncoPlus Interior HD',fin:'Mate lavável para interiores',col:'Areia Quente',cd:'IN-1208',sw:'#DECBA9',why:'Renovação interior com prioridade à praticidade e a uma leitura neutra fácil de repetir noutras paredes.'};}
+  var el=document.getElementById('reco');if(!el)return;
+  el.innerHTML='<div class="top"><div class="sw" style="background:'+rec.sw+'"></div><div><div class="pname">'+rec.prod+'</div><div class="pf">'+rec.fin+'</div></div></div>'+
+    '<div class="grid"><div class="m"><div class="k">Cor sugerida</div><div class="v">'+rec.col+' · '+rec.cd+'</div></div><div class="m"><div class="k">Quantidade</div><div class="v">'+liters+' litros</div></div></div>'+
+    '<p class="why">'+rec.why+'</p><a class="btn" data-go="/produto/incostop">Ver produto recomendado</a>';
+  bindGo(el);
+}
+
+function bindGo(scope){
+  (scope||document).querySelectorAll('[data-go]').forEach(function(a){
+    if(a._b)return;a._b=1;a.addEventListener('click',function(e){e.preventDefault();location.hash='#'+a.getAttribute('data-go');});
+  });
+}
+
+function render(){
+  var hash=(location.hash||'#/').slice(1);
+  var parts=hash.split('/').filter(Boolean);
+  var key='/'+(parts[0]||'');
+  var fn=PAGES[key]||PAGES['/'];
+  document.getElementById('app').innerHTML=fn(parts[1]);
+  window.scrollTo(0,0);
+  document.querySelectorAll('#nav a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-k')===parts[0]);});
+  bindGo(document);
+
+  if(key==='/produtos'){
+    var grid=document.getElementById('grid');
+    document.querySelectorAll('#filters .chip').forEach(function(ch){ch.addEventListener('click',function(){
+      document.querySelectorAll('#filters .chip').forEach(function(x){x.classList.remove('on')});ch.classList.add('on');
+      var f=ch.getAttribute('data-f');
+      grid.innerHTML=PRODUCTS.filter(function(p){return f==='Tudo'||p[5]===f}).map(prodCard).join('');bindGo(grid);
+    });});
+  }
+  if(key==='/cores'){
+    var cg=document.getElementById('cgrid');
+    document.querySelectorAll('#cfilters .chip').forEach(function(ch){ch.addEventListener('click',function(){
+      document.querySelectorAll('#cfilters .chip').forEach(function(x){x.classList.remove('on')});ch.classList.add('on');
+      var f=ch.getAttribute('data-cf');
+      cg.innerHTML=COLOURS.filter(function(c){return f==='Tudo'||c[3]===f}).map(colourCard).join('');bindGo(cg);
+    });});
+  }
+  if(key==='/produto'){
+    document.querySelectorAll('#thumbs div').forEach(function(t){t.addEventListener('click',function(){
+      document.querySelectorAll('#thumbs div').forEach(function(x){x.classList.remove('on')});t.classList.add('on');
+      document.getElementById('bigsw').style.background=t.getAttribute('data-sw');
+    });});
+    document.querySelectorAll('.opts').forEach(function(g){g.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
+      g.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+    });});});
+  }
+  if(key==='/configurador'){
+    ['brief','room','fin','area'].forEach(function(id){var e=document.getElementById(id);if(e)e.addEventListener('change',recommend);});
+    recommend();
+  }
+}
+window.addEventListener('hashchange',render);
+window.addEventListener('scroll',function(){document.getElementById('hd').classList.toggle('scrolled',window.scrollY>6)});
+render();
+</script>
+</body>
+</html>
